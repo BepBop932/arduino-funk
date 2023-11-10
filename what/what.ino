@@ -1,22 +1,23 @@
-#include <Servo.h>
-#include <LiquidCrystal.h>
-
-const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-String input;
-
-void setup() {
-    lcd.begin(16,2);
-    lcd.print("Hello, World!");
-    Serial.begin(9600);
-}
-
-void loop() {
-    if(Serial.available()){
-        Serial.print("type thing:");
-        input = Serial.read();
+int motorPin = 3;
+ 
+void setup() 
+{ 
+  pinMode(motorPin, OUTPUT);
+  Serial.begin(9600);
+  while (! Serial);
+  Serial.println("Speed 0 to 255");
+  Serial.println("But the advice 50 to 255. Because the minimum voltage required to start the motor is 50.");
+} 
+ 
+ 
+void loop() 
+{ 
+  if (Serial.available())
+  {
+    int speed = Serial.parseInt();
+    if (speed >= 50 && speed <= 255)
+    {
+      analogWrite(motorPin, speed);
     }
-    lcd.clear();
-    lcd.write(input);
-    delay(1000);
-}
+  }
+} 
